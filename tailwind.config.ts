@@ -60,6 +60,12 @@ export default {
           'border': 'hsl(var(--sidebar-border))',
           'ring': 'hsl(var(--sidebar-ring))',
         },
+        brand: {
+          DEFAULT: 'hsl(var(--brand))',
+          foreground: 'hsl(var(--brand-foreground))',
+          light: 'hsl(var(--brand-light))',
+          hover: 'hsl(var(--brand-light-hover))',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
