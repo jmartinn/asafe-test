@@ -37,9 +37,9 @@ const navigation = [
 
 const data = {
   user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
+    name: 'John Doe',
+    email: 'panic@thedis.co',
+    avatar: 'https://github.com/jmartinn.png',
   },
 };
 
@@ -51,7 +51,9 @@ export function AppSidebar() {
       <SidebarHeader>
         <div className="flex items-center gap-2 px-4 py-3 pt-2">
           <span className="sr-only">A-SAFE</span>
-          <Icons.logo className="h-9" />
+          <Link href="/">
+            <Icons.logo className="h-9 cursor-pointer" />
+          </Link>
         </div>
       </SidebarHeader>
       <SidebarContent>

@@ -29,7 +29,7 @@ body {
     --ring: 240 10% 3.9%;
 
     /* Charts specific variables */
-    --chart-1: 12 76% 61%;
+    --chart-1: 38 92% 50%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
@@ -47,11 +47,6 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* Brand colors */
-    /* --brand: 38 92% 50%; */
-    /* --brand-foreground: 0 0% 0%; */
-    /* --brand-light: 38 92% 50% / 0.2; */
-    /* --brand-light-hover: 38 92% 50% / 0.3; */
-
     --brand: 181 44% 55%;
     --brand-foreground: 0 0% 100%;
     --brand-light: 181 44% 55% / 0.15;
@@ -80,7 +75,7 @@ body {
     --ring: 240 4.9% 83.9%;
 
     /* Charts specific variables */
-    --chart-1: 220 70% 50%;
+    --chart-1: 38 92% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
@@ -97,11 +92,6 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* Brand colors */
-    /* --brand: 38 92% 50%; */
-    /* --brand-foreground: 0 0% 0%; */
-    /* --brand-light: 38 92% 50% / 0.2; */
-    /* --brand-light-hover: 38 92% 50% / 0.3; */
-
     --brand: 181 44% 55%;
     --brand-foreground: 0 0% 0%;
     --brand-light: 181 44% 55% / 0.2;

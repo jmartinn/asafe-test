@@ -67,20 +67,19 @@ export function SiteHeader() {
 function createBreadcrumbItems(pathname: string): NavItem[] {
   const segments = pathname.split('/').filter(Boolean);
 
-  if (!segments.length) segments.push('');
-
   const items: NavItem[] = [];
-  let currentPath = '';
 
-  if (segments[0] === '') {
+  items.push({ label: 'Dashboard', href: '/' });
+
+  if (segments.length === 0) {
     items.push({ label: 'Overview', href: '/' });
+    return items;
   }
 
-  segments.forEach((segment, index) => {
-    if (index === 0 && segment === '') return;
+  let currentPath = '';
 
+  segments.forEach((segment) => {
     currentPath += `/${segment}`;
-
     const label = formatSegmentLabel(segment);
     items.push({ label, href: currentPath });
   });
