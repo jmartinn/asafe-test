@@ -1,6 +1,7 @@
 import { Incident } from '../schemas/incident';
 
-export const incidents: Incident[] = [
+// Initial set of incident examples
+export const sampleIncidents: Incident[] = [
   {
     id: 'INC-001',
     location: 'Warehouse A',
@@ -81,86 +82,73 @@ export const incidents: Incident[] = [
     status: 'Resolved',
     date: '2024-03-11',
   },
-  {
-    id: 'INC-011',
-    location: 'Parking Lot',
-    type: 'Impact Detection',
-    severity: 'Low',
-    status: 'Pending',
-    date: '2024-03-10',
-  },
-  {
-    id: 'INC-012',
-    location: 'Loading Dock 1',
-    type: 'Barrier Breach',
-    severity: 'High',
-    status: 'In Progress',
-    date: '2024-03-09',
-  },
-  {
-    id: 'INC-013',
-    location: 'Server Room',
-    type: 'System Offline',
-    severity: 'Critical',
-    status: 'Resolved',
-    date: '2024-03-08',
-  },
-  {
-    id: 'INC-014',
-    location: 'Warehouse C',
-    type: 'Equipment Failure',
-    severity: 'Medium',
-    status: 'Pending',
-    date: '2024-03-07',
-  },
-  {
-    id: 'INC-015',
-    location: 'Main Gate',
-    type: 'Unauthorized Access',
-    severity: 'High',
-    status: 'In Progress',
-    date: '2024-03-06',
-  },
-  {
-    id: 'INC-016',
-    location: 'Security Room',
-    type: 'Fire Alarm',
-    severity: 'Critical',
-    status: 'Resolved',
-    date: '2024-03-05',
-  },
-  {
-    id: 'INC-017',
-    location: 'Storage Area D',
-    type: 'Impact Detection',
-    severity: 'Medium',
-    status: 'Pending',
-    date: '2024-03-04',
-  },
-  {
-    id: 'INC-018',
-    location: 'Control Center',
-    type: 'System Offline',
-    severity: 'Low',
-    status: 'Resolved',
-    date: '2024-03-03',
-  },
-  {
-    id: 'INC-019',
-    location: 'Dispatch Bay',
-    type: 'Barrier Breach',
-    severity: 'High',
-    status: 'In Progress',
-    date: '2024-03-02',
-  },
-  {
-    id: 'INC-020',
-    location: 'Warehouse A',
-    type: 'Unauthorized Access',
-    severity: 'Critical',
-    status: 'Pending',
-    date: '2024-03-01',
-  },
 ];
 
+// Generate a large dataset of 1000+ incidents
+const generateLargeDataset = (count: number = 1000): Incident[] => {
+  const severities = ['Low', 'Medium', 'High', 'Critical'] as const;
+  const statuses = ['Resolved', 'In Progress', 'Pending'] as const;
+  const types = [
+    'Impact Detection',
+    'Barrier Breach',
+    'System Offline',
+    'Unauthorized Access',
+    'Fire Alarm',
+    'Equipment Failure',
+  ] as const;
+  const locations = [
+    'Warehouse A',
+    'Loading Bay 3',
+    'Storage Area B',
+    'Dispatch Zone',
+    'Main Office',
+    'Security Booth',
+    'Loading Dock 2',
+    'Warehouse B',
+    'Storage Area C',
+    'Entrance Gate',
+    'North Wing',
+    'South Wing',
+    'East Wing',
+    'West Wing',
+    'Parking Lot',
+    'Admin Building',
+    'Maintenance Room',
+    'Server Room',
+    'Control Center',
+    'Meeting Room',
+  ];
+
+  const result: Incident[] = [...sampleIncidents]; // Include our sample incidents
+
+  // Start from 11 to avoid ID conflicts with sample data
+  for (let i = 11; i < count + 11; i++) {
+    const id = `INC-${String(i).padStart(4, '0')}`;
+    const severity = severities[Math.floor(Math.random() * severities.length)];
+    const status = statuses[Math.floor(Math.random() * statuses.length)];
+    const type = types[Math.floor(Math.random() * types.length)];
+    const location = locations[Math.floor(Math.random() * locations.length)];
+
+    // Generate a random date within the last year
+    const date = new Date();
+    date.setDate(date.getDate() - Math.floor(Math.random() * 365));
+    const dateString = date.toISOString().split('T')[0];
+
+    result.push({
+      id,
+      severity,
+      status,
+      type,
+      location,
+      date: dateString,
+    });
+  }
+
+  return result;
+};
+
+// Export a large dataset of incidents
+export const incidents = generateLargeDataset(1000);
+
+// Useful for components that need a subset of incident data (like the dashboard table)
 export const recentIncidents = incidents.slice(0, 5);
