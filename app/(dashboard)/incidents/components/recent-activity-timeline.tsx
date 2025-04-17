@@ -110,12 +110,12 @@ export function RecentActivityTimeline() {
                     />
                   </div>
                   <div>
-                    <p className="text-sm leading-none">
+                    <div className="text-sm leading-none">
                       <span className="font-semibold">{activity.user}</span> {config.text}{' '}
                       <Badge variant="outline" className="ml-1 font-medium">
                         {activity.incident}
                       </Badge>
-                    </p>
+                    </div>
                     <p className="mt-1 text-xs text-muted-foreground">{activity.time}</p>
                   </div>
                 </div>
