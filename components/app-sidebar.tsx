@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 import {
   Sidebar as ShadcnSidebar,
@@ -25,6 +26,7 @@ import { cn } from '@/lib/utils';
 
 import { Icons } from './icons';
 import { NavUser } from './nav-user';
+import { NavUserSkeleton } from './nav-user-skeleton';
 
 const navigation = [
   { name: 'Overview', href: '/', icon: LayoutDashboard },
@@ -35,16 +37,11 @@ const navigation = [
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
-const data = {
-  user: {
-    name: 'John Doe',
-    email: 'panic@thedis.co',
-    avatar: 'https://github.com/jmartinn.png',
-  },
-};
-
 export function AppSidebar() {
   const pathname = usePathname();
+
+  const { data: session, status } = useSession();
+  const isLoading = status === 'loading';
 
   return (
     <ShadcnSidebar className="border-r bg-sidebar">
@@ -82,7 +79,17 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        {isLoading ? (
+          <NavUserSkeleton />
+        ) : session?.user ? (
+          <NavUser
+            user={{
+              name: session.user.name,
+              email: session.user.email,
+              avatar: session.user.image,
+            }}
+          />
+        ) : null}
       </SidebarFooter>
     </ShadcnSidebar>
   );
