@@ -1,123 +1,117 @@
 'use client';
 
-import type { Table } from '@tanstack/react-table';
-import { X as CrossIcon } from 'lucide-react';
-import { AlertTriangle, Flame, Shield, Zap } from 'lucide-react';
+import { Table } from '@tanstack/react-table';
+import { X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 import { DataTableFacetedFilter } from './data-table-faceted-filter';
+import { DataTableViewOptions } from './data-table-view-options';
+
+// Define the severity options
+const severityOptions = [
+  {
+    label: 'Low',
+    value: 'Low',
+    color: 'bg-green-500',
+  },
+  {
+    label: 'Medium',
+    value: 'Medium',
+    color: 'bg-yellow-500',
+  },
+  {
+    label: 'High',
+    value: 'High',
+    color: 'bg-red-500',
+  },
+  {
+    label: 'Critical',
+    value: 'Critical',
+    color: 'bg-purple-600',
+  },
+];
+
+// Define the status options
+const statusOptions = [
+  {
+    label: 'Resolved',
+    value: 'Resolved',
+    color: 'bg-green-500',
+  },
+  {
+    label: 'In Progress',
+    value: 'In Progress',
+    color: 'bg-blue-500',
+  },
+  {
+    label: 'Pending',
+    value: 'Pending',
+    color: 'bg-zinc-500',
+  },
+];
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
+  globalFilter?: string;
+  setGlobalFilter?: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>) {
-  const isFiltered = table.getState().columnFilters.length > 0;
+export function DataTableToolbar<TData>({
+  table,
+  globalFilter = '',
+  setGlobalFilter,
+}: DataTableToolbarProps<TData>) {
+  const isFiltered = table.getState().columnFilters.length > 0 || globalFilter !== '';
+
+  // Handle filter state based on props or table state
+  const handleFilterChange = (value: string) => {
+    if (setGlobalFilter) {
+      setGlobalFilter(value);
+    } else {
+      table.setGlobalFilter(value);
+    }
+  };
 
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder="Filter incidents by id..."
-          value={(table.getColumn('id')?.getFilterValue() as string) ?? ''}
-          onChange={(event) => table.getColumn('id')?.setFilterValue(event.target.value)}
+          placeholder="Filter incidents..."
+          value={globalFilter}
+          onChange={(event) => handleFilterChange(event.target.value)}
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {table.getColumn('type') && (
+        {table.getColumn('severity') && (
           <DataTableFacetedFilter
-            column={table.getColumn('type')}
-            title="Type"
-            options={[
-              {
-                label: 'Impact Detection',
-                value: 'Impact Detection',
-                icon: AlertTriangle,
-              },
-              {
-                label: 'Barrier Breach',
-                value: 'Barrier Breach',
-                icon: Shield,
-              },
-              {
-                label: 'System Offline',
-                value: 'System Offline',
-                icon: Zap,
-              },
-              {
-                label: 'Unauthorized Access',
-                value: 'Unauthorized Access',
-                icon: Shield,
-              },
-              {
-                label: 'Fire Alarm',
-                value: 'Fire Alarm',
-                icon: Flame,
-              },
-              {
-                label: 'Equipment Failure',
-                value: 'Equipment Failure',
-                icon: AlertTriangle,
-              },
-            ]}
+            column={table.getColumn('severity')}
+            title="Severity"
+            options={severityOptions}
           />
         )}
         {table.getColumn('status') && (
           <DataTableFacetedFilter
             column={table.getColumn('status')}
             title="Status"
-            options={[
-              {
-                label: 'Resolved',
-                value: 'Resolved',
-              },
-              {
-                label: 'In Progress',
-                value: 'In Progress',
-              },
-              {
-                label: 'Pending',
-                value: 'Pending',
-              },
-            ]}
-          />
-        )}
-        {table.getColumn('severity') && (
-          <DataTableFacetedFilter
-            column={table.getColumn('severity')}
-            title="Severity"
-            options={[
-              {
-                label: 'Low',
-                value: 'Low',
-              },
-              {
-                label: 'Medium',
-                value: 'Medium',
-              },
-              {
-                label: 'High',
-                value: 'High',
-              },
-              {
-                label: 'Critical',
-                value: 'Critical',
-              },
-            ]}
+            options={statusOptions}
           />
         )}
         {isFiltered && (
           <Button
             variant="ghost"
-            onClick={() => table.resetColumnFilters()}
+            onClick={() => {
+              table.resetColumnFilters();
+              handleFilterChange('');
+            }}
             className="h-8 px-2 lg:px-3"
           >
             Reset
-            <CrossIcon className="ml-2 size-4" />
+            <X className="ml-2 h-4 w-4" />
           </Button>
         )}
       </div>
+      <DataTableViewOptions table={table} />
     </div>
   );
 }

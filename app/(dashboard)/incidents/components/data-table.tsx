@@ -5,8 +5,11 @@ import {
   type ColumnFiltersState,
   type SortingState,
   type VisibilityState,
+  type PaginationState,
   flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
@@ -14,6 +17,7 @@ import {
 } from '@tanstack/react-table';
 import * as React from 'react';
 
+import { Incident } from '@/lib/schemas/incident';
 import {
   Table,
   TableBody,
@@ -29,37 +33,102 @@ import { DataTableToolbar } from './data-table-toolbar';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  pageCount?: number;
+
+  // State handlers
+  pagination?: PaginationState;
+  setPagination?: React.Dispatch<React.SetStateAction<PaginationState>>;
+  sorting?: SortingState;
+  setSorting?: React.Dispatch<React.SetStateAction<SortingState>>;
+  columnFilters?: ColumnFiltersState;
+  setColumnFilters?: React.Dispatch<React.SetStateAction<ColumnFiltersState>>;
+  globalFilter?: string;
+  setGlobalFilter?: React.Dispatch<React.SetStateAction<string>>;
+  columnVisibility?: VisibilityState;
+  setColumnVisibility?: React.Dispatch<React.SetStateAction<VisibilityState>>;
+  rowSelection?: Record<string, boolean>;
+  setRowSelection?: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+
+  // Loading state
+  isLoading?: boolean;
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+  pageCount = 0,
 
+  // State handlers
+  pagination,
+  setPagination,
+  sorting,
+  setSorting,
+  columnFilters,
+  setColumnFilters,
+  globalFilter,
+  setGlobalFilter,
+  columnVisibility,
+  setColumnVisibility,
+  rowSelection,
+  setRowSelection,
+
+  // Loading state
+  isLoading = false,
+}: DataTableProps<TData, TValue>) {
+  // Internal state when not controlled from outside
+  const [internalRowSelection, setInternalRowSelection] = React.useState({});
+  const [internalColumnVisibility, setInternalColumnVisibility] = React.useState<VisibilityState>(
+    {},
+  );
+  const [internalColumnFilters, setInternalColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [internalGlobalFilter, setInternalGlobalFilter] = React.useState<string>('');
+  const [internalSorting, setInternalSorting] = React.useState<SortingState>([]);
+  const [internalPagination, setInternalPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  // Use external state if provided, otherwise fall back to internal state
   const table = useReactTable({
     data,
     columns,
+    manualPagination: !!pageCount,
+    manualSorting: !!pageCount,
+    manualFiltering: !!pageCount,
+    pageCount: pageCount,
+
     state: {
-      sorting,
-      columnVisibility,
-      rowSelection,
-      columnFilters,
+      sorting: sorting || internalSorting,
+      columnVisibility: columnVisibility || internalColumnVisibility,
+      rowSelection: rowSelection || internalRowSelection,
+      columnFilters: columnFilters || internalColumnFilters,
+      globalFilter: globalFilter || internalGlobalFilter,
+      pagination: pagination || internalPagination,
     },
+
     enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection || setInternalRowSelection,
+    onSortingChange: setSorting || setInternalSorting,
+    onColumnFiltersChange: setColumnFilters || setInternalColumnFilters,
+    onGlobalFilterChange: setGlobalFilter || setInternalGlobalFilter,
+    onColumnVisibilityChange: setColumnVisibility || setInternalColumnVisibility,
+    onPaginationChange: setPagination || setInternalPagination,
+
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} />
+      <DataTableToolbar
+        table={table}
+        globalFilter={globalFilter || internalGlobalFilter}
+        setGlobalFilter={setGlobalFilter || setInternalGlobalFilter}
+      />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -78,7 +147,18 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading && (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  <div className="flex items-center justify-center">
+                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                    <span className="ml-2">Loading...</span>
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+
+            {!isLoading && table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => (
@@ -88,13 +168,13 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                   ))}
                 </TableRow>
               ))
-            ) : (
+            ) : !isLoading ? (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>
-            )}
+            ) : null}
           </TableBody>
         </Table>
       </div>
