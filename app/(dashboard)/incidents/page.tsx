@@ -1,18 +1,64 @@
 import { Download, Filter, Plus } from 'lucide-react';
+import { Suspense } from 'react';
 
+import { getIncidents } from '@/app/actions/incidents';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { incidents } from '@/lib/data/incidents';
 
-import { columns } from './components/columns';
 import { DataTable } from './components/data-table';
+import { columns } from './components/columns';
 import { LocationChart } from './components/location-incidents-chart';
 import { RecentActivityTimeline } from './components/recent-activity-timeline';
 import { SeverityChart } from './components/severity-distribution-chart';
 import { StatBadge } from './components/stat-badge';
+import { IncidentsTableWrapper } from './components/incidents-table-wrapper';
 
-export default function IncidentsPage() {
+// Loading component for table
+function TableSkeleton() {
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between">
+        <Skeleton className="h-10 w-[250px]" />
+        <Skeleton className="h-10 w-[180px]" />
+      </div>
+      <div className="rounded-md border">
+        <div className="h-16 border-b bg-muted/10 px-4" />
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="flex gap-4 border-b p-4">
+            <Skeleton className="h-6 w-full" />
+          </div>
+        ))}
+      </div>
+      <div className="flex items-center justify-end space-x-2">
+        <Skeleton className="h-10 w-[100px]" />
+        <Skeleton className="h-10 w-[70px]" />
+      </div>
+    </div>
+  );
+}
+
+// Loading component for charts
+function ChartsSkeleton() {
+  return (
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {Array.from({ length: 3 }).map((_, i) => (
+        <Skeleton key={i} className="h-[350px] w-full rounded-xl" />
+      ))}
+    </div>
+  );
+}
+
+export default async function IncidentsPage() {
+  // Pre-fetch initial data
+  const initialData = await getIncidents({
+    pagination: { pageIndex: 0, pageSize: 10 },
+    sorting: [],
+    columnFilters: [],
+    globalFilter: '',
+  });
+
   return (
     <div className="space-y-6 p-6">
       <div className="flex items-start justify-between">
@@ -24,9 +70,17 @@ export default function IncidentsPage() {
         </div>
 
         <div className="flex gap-4">
-          <StatBadge label="Total" value="573" />
-          <StatBadge label="Open" value="24" variant="warning" />
-          <StatBadge label="Critical" value="2" variant="danger" />
+          <StatBadge label="Total" value={`${initialData.totalCount}`} />
+          <StatBadge
+            label="Open"
+            value={`${initialData.data.filter((i) => i.status !== 'Resolved').length}`}
+            variant="warning"
+          />
+          <StatBadge
+            label="Critical"
+            value={`${initialData.data.filter((i) => i.severity === 'Critical').length}`}
+            variant="danger"
+          />
         </div>
       </div>
 
@@ -43,7 +97,7 @@ export default function IncidentsPage() {
             <Download className="size-4" />
             <span className="sr-only">Export</span>
           </Button>
-          <Button className="bg-brand text-brand-foreground hover:bg-brand/90">
+          <Button>
             <Plus className="mr-2 size-4" />
             New Incident
           </Button>
@@ -56,15 +110,18 @@ export default function IncidentsPage() {
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
         <TabsContent value="table" className="space-y-4">
-          {/* Data Table */}
-          <DataTable columns={columns} data={incidents} />
+          <Suspense fallback={<TableSkeleton />}>
+            <IncidentsTableWrapper initialData={initialData} />
+          </Suspense>
         </TabsContent>
         <TabsContent value="analytics" className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <SeverityChart />
-            <LocationChart />
-            <RecentActivityTimeline />
-          </div>
+          <Suspense fallback={<ChartsSkeleton />}>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <SeverityChart />
+              <LocationChart />
+              <RecentActivityTimeline />
+            </div>
+          </Suspense>
         </TabsContent>
       </Tabs>
     </div>
