@@ -32,16 +32,8 @@ export function SeverityChart() {
           className="mx-auto aspect-square max-h-[250px]"
         >
           <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Pie
-              data={severityChartData}
-              dataKey="incidents"
-              nameKey="severity"
-              innerRadius={60}
-            />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+            <Pie data={severityChartData} dataKey="incidents" nameKey="severity" innerRadius={60} />
           </PieChart>
         </ChartContainer>
       </CardContent>

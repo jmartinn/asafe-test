@@ -33,26 +33,19 @@ export function SiteHeader() {
       <div className="flex w-full items-center justify-between gap-1 px-4 lg:gap-2 lg:px-6">
         <div className="flex items-center gap-2">
           <SidebarTrigger className="-ml-1" />
-          <Separator
-            orientation="vertical"
-            className="mx-2 data-[orientation=vertical]:h-4"
-          />
+          <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-4" />
           <Breadcrumb className="hidden sm:block">
             <BreadcrumbList>
               {breadcrumbItems.map((item, index) => (
                 <Fragment key={`breadcrumb-${index}`}>
                   {index < breadcrumbItems.length - 1 ? (
                     <BreadcrumbItem>
-                      <BreadcrumbLink href={item.href}>
-                        {item.label}
-                      </BreadcrumbLink>
+                      <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
                     </BreadcrumbItem>
                   ) : (
                     <BreadcrumbPage>{item.label}</BreadcrumbPage>
                   )}
-                  {index < breadcrumbItems.length - 1 && (
-                    <BreadcrumbSeparator />
-                  )}
+                  {index < breadcrumbItems.length - 1 && <BreadcrumbSeparator />}
                 </Fragment>
               ))}
             </BreadcrumbList>

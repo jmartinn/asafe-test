@@ -20,27 +20,21 @@ import { DataTableColumnHeader } from './data-table-column-header';
 export const columns: ColumnDef<Incident>[] = [
   {
     accessorKey: 'id',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="ID" />,
     cell: ({ row }) => <div className="font-medium">{row.getValue('id')}</div>,
     enableSorting: true,
     enableHiding: false,
   },
   {
     accessorKey: 'location',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Location" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Location" />,
     cell: ({ row }) => <div>{row.getValue('location')}</div>,
     enableSorting: true,
     enableHiding: true,
   },
   {
     accessorKey: 'type',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Type" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Type" />,
     cell: ({ row }) => <div>{row.getValue('type')}</div>,
     filterFn: 'arrIncludesSome',
     enableSorting: true,
@@ -48,9 +42,7 @@ export const columns: ColumnDef<Incident>[] = [
   },
   {
     accessorKey: 'severity',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Severity" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Severity" />,
     cell: ({ row }) => {
       const severity = row.getValue('severity') as string;
 
@@ -73,9 +65,7 @@ export const columns: ColumnDef<Incident>[] = [
   },
   {
     accessorKey: 'status',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
     cell: ({ row }) => {
       const status = row.getValue('status') as string;
 
@@ -97,9 +87,7 @@ export const columns: ColumnDef<Incident>[] = [
   },
   {
     accessorKey: 'date',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Date" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Date" />,
     cell: ({ row }) => {
       const date = new Date(row.getValue('date'));
       return (
@@ -130,9 +118,7 @@ export const columns: ColumnDef<Incident>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(incident.id)}
-            >
+            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(incident.id)}>
               Copy incident ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />

@@ -66,9 +66,7 @@ export function LocationsTable() {
             <TableCell>{location.address}</TableCell>
             <TableCell>{location.type}</TableCell>
             <TableCell>
-              <Badge
-                variant={location.status === 'Active' ? 'default' : 'secondary'}
-              >
+              <Badge variant={location.status === 'Active' ? 'default' : 'secondary'}>
                 {location.status}
               </Badge>
             </TableCell>

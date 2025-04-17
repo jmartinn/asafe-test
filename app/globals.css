@@ -92,10 +92,14 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* Brand colors */
-    --brand: 181 44% 55%;
-    --brand-foreground: 0 0% 0%;
-    --brand-light: 181 44% 55% / 0.2;
-    --brand-light-hover: 181 44% 55% / 0.3;
+    /* --brand: 181 44% 55%; */
+    /* --brand-foreground: 0 0% 0%; */
+    /* --brand-light: 181 44% 55% / 0.2; */
+    /* --brand-light-hover: 181 44% 55% / 0.3; */
+    --brand: 181 60% 50%;
+    --brand-foreground: 0 0% 100%;
+    --brand-light: 181 70% 50% / 0.15;
+    --brand-light-hover: 181 70% 50% / 0.25;
   }
 }
 

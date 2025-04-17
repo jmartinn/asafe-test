@@ -1,11 +1,4 @@
-import {
-  Calendar,
-  CheckCircle,
-  Clock,
-  MessageSquare,
-  RefreshCw,
-  UserPlus,
-} from 'lucide-react';
+import { Calendar, CheckCircle, Clock, MessageSquare, RefreshCw, UserPlus } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -112,22 +105,18 @@ export function RecentActivityTimeline() {
                         activity.type === 'resolved' && 'text-green-500',
                         activity.type === 'updated' && 'text-amber-500',
                         activity.type === 'assigned' && 'text-purple-500',
-                        activity.type === 'commented' &&
-                          'text-muted-foreground',
+                        activity.type === 'commented' && 'text-muted-foreground',
                       )}
                     />
                   </div>
                   <div>
                     <p className="text-sm leading-none">
-                      <span className="font-semibold">{activity.user}</span>{' '}
-                      {config.text}{' '}
+                      <span className="font-semibold">{activity.user}</span> {config.text}{' '}
                       <Badge variant="outline" className="ml-1 font-medium">
                         {activity.incident}
                       </Badge>
                     </p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {activity.time}
-                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">{activity.time}</p>
                   </div>
                 </div>
               );

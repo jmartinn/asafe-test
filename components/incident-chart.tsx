@@ -27,10 +27,7 @@ export function IncidentChart() {
         <CardDescription>January - December 2024</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer
-          config={monthlyChartConfig as ChartConfig}
-          className="h-[300px] w-full"
-        >
+        <ChartContainer config={monthlyChartConfig as ChartConfig} className="h-[300px] w-full">
           <LineChart
             accessibilityLayer
             data={monthlyIncidentData}
@@ -47,10 +44,7 @@ export function IncidentChart() {
               tickMargin={8}
               tickFormatter={(value) => value.slice(0, 3)}
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
             <Line
               dataKey="incidents"
               type="natural"

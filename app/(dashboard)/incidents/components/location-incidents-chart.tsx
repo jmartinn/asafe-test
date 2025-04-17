@@ -1,22 +1,9 @@
 'use client';
 
 import { TrendingUp } from 'lucide-react';
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  LabelList,
-  XAxis,
-  YAxis,
-} from 'recharts';
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from 'recharts';
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
@@ -55,16 +42,8 @@ export function LocationChart() {
               hide
             />
             <XAxis dataKey="incidents" type="number" hide />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
-            />
-            <Bar
-              dataKey="incidents"
-              layout="vertical"
-              fill="var(--color-incidents)"
-              radius={4}
-            >
+            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
+            <Bar dataKey="incidents" layout="vertical" fill="var(--color-incidents)" radius={4}>
               <LabelList
                 dataKey="location"
                 position="insideLeft"

@@ -43,7 +43,7 @@ export default function IncidentsPage() {
             <Download className="size-4" />
             <span className="sr-only">Export</span>
           </Button>
-          <Button>
+          <Button className="bg-brand text-brand-foreground hover:bg-brand/90">
             <Plus className="mr-2 size-4" />
             New Incident
           </Button>

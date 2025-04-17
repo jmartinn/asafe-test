@@ -35,9 +35,7 @@ export function IncidentsTable() {
             <TableCell>
               <StatusBadge status={incident.status} />
             </TableCell>
-            <TableCell className="text-right">
-              {formatDate(incident.date)}
-            </TableCell>
+            <TableCell className="text-right">{formatDate(incident.date)}</TableCell>
           </TableRow>
         ))}
       </TableBody>
