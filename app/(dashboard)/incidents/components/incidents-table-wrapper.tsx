@@ -1,18 +1,16 @@
 'use client';
 
-import { useState } from 'react';
 import { type IncidentsResponse } from '@/app/actions/incidents';
 import { useIncidents } from '@/hooks/use-incidents';
 
-import { DataTable } from './data-table';
 import { columns } from './columns';
+import { DataTable } from './data-table';
 
 interface IncidentsTableWrapperProps {
   initialData: IncidentsResponse;
 }
 
 export function IncidentsTableWrapper({ initialData }: IncidentsTableWrapperProps) {
-  // Use our custom hook with initial data from server
   const {
     data,
     pageCount,
@@ -36,7 +34,6 @@ export function IncidentsTableWrapper({ initialData }: IncidentsTableWrapperProp
       data={data}
       columns={columns}
       pageCount={pageCount}
-      // State
       pagination={pagination}
       setPagination={setPagination}
       sorting={sorting}
@@ -49,7 +46,6 @@ export function IncidentsTableWrapper({ initialData }: IncidentsTableWrapperProp
       setColumnVisibility={setColumnVisibility}
       rowSelection={rowSelection}
       setRowSelection={setRowSelection}
-      // Loading state
       isLoading={isLoading}
     />
   );

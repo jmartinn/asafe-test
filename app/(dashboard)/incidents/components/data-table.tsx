@@ -3,9 +3,9 @@
 import {
   type ColumnDef,
   type ColumnFiltersState,
+  type PaginationState,
   type SortingState,
   type VisibilityState,
-  type PaginationState,
   flexRender,
   getCoreRowModel,
   getFacetedRowModel,
@@ -17,7 +17,6 @@ import {
 } from '@tanstack/react-table';
 import * as React from 'react';
 
-import { Incident } from '@/lib/schemas/incident';
 import {
   Table,
   TableBody,
@@ -35,7 +34,6 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   pageCount?: number;
 
-  // State handlers
   pagination?: PaginationState;
   setPagination?: React.Dispatch<React.SetStateAction<PaginationState>>;
   sorting?: SortingState;
@@ -49,7 +47,6 @@ interface DataTableProps<TData, TValue> {
   rowSelection?: Record<string, boolean>;
   setRowSelection?: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
 
-  // Loading state
   isLoading?: boolean;
 }
 
@@ -58,7 +55,6 @@ export function DataTable<TData, TValue>({
   data,
   pageCount = 0,
 
-  // State handlers
   pagination,
   setPagination,
   sorting,
@@ -72,10 +68,8 @@ export function DataTable<TData, TValue>({
   rowSelection,
   setRowSelection,
 
-  // Loading state
   isLoading = false,
 }: DataTableProps<TData, TValue>) {
-  // Internal state when not controlled from outside
   const [internalRowSelection, setInternalRowSelection] = React.useState({});
   const [internalColumnVisibility, setInternalColumnVisibility] = React.useState<VisibilityState>(
     {},
@@ -88,7 +82,6 @@ export function DataTable<TData, TValue>({
     pageSize: 10,
   });
 
-  // Use external state if provided, otherwise fall back to internal state
   const table = useReactTable({
     data,
     columns,
@@ -151,7 +144,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
                   <div className="flex items-center justify-center">
-                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                    <div className="size-6 animate-spin rounded-full border-2 border-current border-t-transparent" />
                     <span className="ml-2">Loading...</span>
                   </div>
                 </TableCell>

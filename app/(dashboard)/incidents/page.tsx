@@ -7,15 +7,12 @@ import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { DataTable } from './components/data-table';
-import { columns } from './components/columns';
+import { IncidentsTableWrapper } from './components/incidents-table-wrapper';
 import { LocationChart } from './components/location-incidents-chart';
 import { RecentActivityTimeline } from './components/recent-activity-timeline';
 import { SeverityChart } from './components/severity-distribution-chart';
 import { StatBadge } from './components/stat-badge';
-import { IncidentsTableWrapper } from './components/incidents-table-wrapper';
 
-// Loading component for table
 function TableSkeleton() {
   return (
     <div className="space-y-4">
@@ -39,7 +36,6 @@ function TableSkeleton() {
   );
 }
 
-// Loading component for charts
 function ChartsSkeleton() {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -51,7 +47,6 @@ function ChartsSkeleton() {
 }
 
 export default async function IncidentsPage() {
-  // Pre-fetch initial data
   const initialData = await getIncidents({
     pagination: { pageIndex: 0, pageSize: 10 },
     sorting: [],
