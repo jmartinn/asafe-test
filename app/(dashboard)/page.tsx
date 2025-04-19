@@ -1,4 +1,5 @@
 import { MapPin, Siren, TriangleAlert } from 'lucide-react';
+import type { Metadata } from 'next';
 
 import { IncidentChart } from '@/components/incident-chart';
 import { IncidentsTable } from '@/components/incidents-table';
@@ -56,3 +57,8 @@ export default function HomePage() {
     </section>
   );
 }
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+  description: 'Overview of safety management data and key metrics (Technical Test Demo)',
+};

@@ -1,4 +1,5 @@
 import { Download, Filter, Plus } from 'lucide-react';
+import type { Metadata } from 'next';
 import { Suspense } from 'react';
 
 import { getIncidents } from '@/app/actions/incidents';
@@ -12,6 +13,27 @@ import { LocationChart } from './components/location-incidents-chart';
 import { RecentActivityTimeline } from './components/recent-activity-timeline';
 import { SeverityChart } from './components/severity-distribution-chart';
 import { StatBadge } from './components/stat-badge';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const initialData = await getIncidents({
+    pagination: { pageIndex: 0, pageSize: 10 },
+    sorting: [],
+    columnFilters: [],
+    globalFilter: '',
+  });
+
+  const openIncidents = initialData.data.filter((i) => i.status !== 'Resolved').length;
+  const criticalIncidents = initialData.data.filter((i) => i.severity === 'Critical').length;
+
+  return {
+    title: `Incidents (${initialData.totalCount})`,
+    description: `Technical Demo: Track and manage safety incidents. Currently ${openIncidents} open incidents.`,
+    openGraph: {
+      title: 'Safety Incidents Management | A-SAFE Demo',
+      description: `Technical Demo: Track ${initialData.totalCount} incidents with ${criticalIncidents} critical issues (Technical Test Project)`,
+    },
+  };
+}
 
 function TableSkeleton() {
   return (
